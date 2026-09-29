@@ -76,4 +76,4 @@ src/
 
 ### Deploying
 
-Deploy the `haris-afnan/` directory (for example on Vercel with *Root Directory* set to `haris-afnan`) and set `NEXT_PUBLIC_SITE_URL`.
+The app lives at the repository root. Set `NEXT_PUBLIC_SITE_URL` in production.
