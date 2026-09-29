@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { thematicLinks, worlds, type World } from "@/content/ecosystem";
-import { useSectionProgress } from "@/components/ui/primitives";
+import { useSectionProgress, useRange } from "@/components/ui/primitives";
 import { easeOutCubic, mulberry32 } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useClient";
 
@@ -38,8 +38,8 @@ function BurstNode({
   const end = start + 0.16;
   const left = useTransform(progress, [start, end], ["50%", `${x}%`], { ease: easeOutCubic });
   const top = useTransform(progress, [start, end], ["50%", `${y}%`], { ease: easeOutCubic });
-  const scale = useTransform(progress, [start - 0.02, start + 0.04, end], [0, 1.3, 1]);
-  const labelOpacity = useTransform(progress, [end - 0.04, end + 0.04], [0, 1]);
+  const scale = useRange(progress, [start - 0.02, start + 0.04, end], [0, 1.3, 1]);
+  const labelOpacity = useRange(progress, [end - 0.04, end + 0.04], [0, 1]);
   return (
     <motion.div className="absolute" style={{ left, top }}>
       <motion.div style={{ scale }} className="-translate-x-1/2 -translate-y-1/2">
@@ -82,10 +82,10 @@ function BurstLine({
   to: number;
   opacity?: number;
 }) {
-  const t = useTransform(progress, [from, to], [0, 1], { ease: easeOutCubic });
+  const t = useRange(progress, [from, to], [0, 1], easeOutCubic);
   const ex = useTransform(t, (v) => x1 + (x2 - x1) * v);
   const ey = useTransform(t, (v) => y1 + (y2 - y1) * v);
-  const o = useTransform(progress, [from, from + 0.02], [0, opacity]);
+  const o = useRange(progress, [from, from + 0.02], [0, opacity]);
   return (
     <motion.line
       x1={x1}
@@ -120,17 +120,17 @@ export function NotOneCompany() {
 
   // Act I — "I didn't build one company."
   const actOneY = useTransform(p, [0, 0.1, 0.36, 0.46], ["8%", "0%", "0%", "-30%"]);
-  const actOneOpacity = useTransform(p, [0, 0.06, 0.38, 0.46], [0.55, 1, 1, 0]);
-  const strike = useTransform(p, [0.24, 0.34], [0, 1]);
-  const dotScale = useTransform(p, [0.1, 0.18, 0.46, 0.5], [0, 1, 1, 1.8]);
-  const dotOpacity = useTransform(p, [0.1, 0.18, 0.5, 0.53], [0, 1, 1, 0]);
+  const actOneOpacity = useRange(p, [0, 0.06, 0.38, 0.46], [0.55, 1, 1, 0]);
+  const strike = useRange(p, [0.24, 0.34], [0, 1]);
+  const dotScale = useRange(p, [0.1, 0.18, 0.46, 0.5], [0, 1, 1, 1.8]);
+  const dotOpacity = useRange(p, [0.1, 0.18, 0.5, 0.53], [0, 1, 1, 0]);
 
   // Act II — "I built an ecosystem."
   const actTwoY = useTransform(p, [0.42, 0.54], ["30%", "0%"], { ease: easeOutCubic });
-  const actTwoOpacity = useTransform(p, [0.42, 0.52, 0.66, 0.78], [0, 1, 1, 0.14]);
-  const actTwoScale = useTransform(p, [0.52, 0.8], [1, 0.82]);
+  const actTwoOpacity = useRange(p, [0.42, 0.52, 0.66, 0.78], [0, 1, 1, 0.14]);
+  const actTwoScale = useRange(p, [0.52, 0.8], [1, 0.82]);
 
-  const caption = useTransform(p, [0.78, 0.86], [0, 1]);
+  const caption = useRange(p, [0.78, 0.86], [0, 1]);
 
   return (
     <section ref={ref} id="not-one-company" data-hud aria-label="I didn't build one company. I built an ecosystem." className="relative h-[420vh]">

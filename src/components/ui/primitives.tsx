@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useScroll, type MotionValue } from "framer-motion";
+import { interpolate, motion, useInView, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,17 @@ import { cn } from "@/lib/utils";
 export function useSectionProgress(ref: React.RefObject<HTMLElement | null>): MotionValue<number> {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   return scrollYProgress;
+}
+
+/**
+ * Maps a scroll motion value through keyframes, evaluated in JS.
+ * (Framer can hand plain range transforms to native scroll-driven animations,
+ * which drift back toward the starting value outside the keyframe range —
+ * a function transform keeps every value exactly where the story needs it.)
+ */
+export function useRange(mv: MotionValue<number>, input: number[], output: number[], ease?: (t: number) => number) {
+  const map = interpolate(input, output, { clamp: true, ease });
+  return useTransform(mv, (v: number) => map(v));
 }
 
 /** Subscribe to a motion value as React state, throttled to animation frames. */

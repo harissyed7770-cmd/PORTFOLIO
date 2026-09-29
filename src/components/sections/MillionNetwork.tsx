@@ -2,10 +2,10 @@
 
 import { useRef } from "react";
 import dynamic from "next/dynamic";
-import { motion, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { person } from "@/content/ecosystem";
 import { useExperience } from "@/components/providers/Experience";
-import { Coordinates, useSectionProgress, useVisible } from "@/components/ui/primitives";
+import { Coordinates, useSectionProgress, useVisible, useRange } from "@/components/ui/primitives";
 import { useDeviceTier } from "@/hooks/useClient";
 
 const MillionScene = dynamic(() => import("./MillionScene"), { ssr: false });
@@ -14,8 +14,8 @@ const words = ["People.", "Ideas.", "Conversations.", "Opportunities."];
 
 function Word({ word, index, progress }: { word: string; index: number; progress: ReturnType<typeof useSectionProgress> }) {
   const start = 0.2 + index * 0.06;
-  const opacity = useTransform(progress, [start, start + 0.04, 0.5, 0.56], [0, 1, 1, 0]);
-  const y = useTransform(progress, [start, start + 0.05], [24, 0]);
+  const opacity = useRange(progress, [start, start + 0.04, 0.5, 0.56], [0, 1, 1, 0]);
+  const y = useRange(progress, [start, start + 0.05], [24, 0]);
   return (
     <motion.span style={{ opacity, y }} className="block">
       {word}
@@ -31,9 +31,9 @@ export function MillionNetwork() {
   const tier = useDeviceTier();
   const count = tier === "ssr" ? null : tier === "small" ? 250_000 : tier === "low" ? 500_000 : 1_000_000;
 
-  const numberOpacity = useTransform(p, [0, 0.06, 0.16, 0.22], [0, 1, 1, 0.08]);
-  const numberScale = useTransform(p, [0, 0.22], [0.92, 1.08]);
-  const clusterCaption = useTransform(p, [0.66, 0.74], [0, 1]);
+  const numberOpacity = useRange(p, [0, 0.06, 0.16, 0.22], [0, 1, 1, 0.08]);
+  const numberScale = useRange(p, [0, 0.22], [0.92, 1.08]);
+  const clusterCaption = useRange(p, [0.66, 0.74], [0, 1]);
   const ratio = count ? Math.round(person.audience.value / count) : 1;
 
   return (

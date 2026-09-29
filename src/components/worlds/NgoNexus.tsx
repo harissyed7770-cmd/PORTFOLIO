@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useTransform } from "framer-motion";
 import { worldById } from "@/content/ecosystem";
 import { useExperience } from "@/components/providers/Experience";
-import { OpenSlot, Rise, useMotionNumber, useSectionProgress, useVisible } from "@/components/ui/primitives";
+import { OpenSlot, Rise, useMotionNumber, useSectionProgress, useVisible, useRange } from "@/components/ui/primitives";
 import { clamp, cn, gaussian, lerp, mulberry32 } from "@/lib/utils";
 import { WorldShell } from "./WorldShell";
 
@@ -232,7 +232,7 @@ export function NgoNexus() {
   const sv = useTransform(p, stageOf);
   const stage = useMotionNumber(sv, 200);
   const current = Math.min(chapters.length - 1, Math.round(stage));
-  const dawn = useTransform(p, [0.1, 0.95], [0, 1]);
+  const dawn = useRange(p, [0.1, 0.95], [0, 1]);
 
   return (
     <WorldShell world={world} className="bg-[#07060a]" coordinates={["Social impact", "The social impact world", "Nexus"]} recordLabel="Initiatives" hideRecord>

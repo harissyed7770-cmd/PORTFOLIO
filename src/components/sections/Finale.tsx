@@ -6,15 +6,15 @@ import { ArrowUpRight, RotateCcw } from "lucide-react";
 import { person, worlds } from "@/content/ecosystem";
 import { useExperience } from "@/components/providers/Experience";
 import { Magnetic } from "@/components/ui/Magnetic";
-import { useSectionProgress } from "@/components/ui/primitives";
+import { useSectionProgress, useRange } from "@/components/ui/primitives";
 import { easeOutCubic } from "@/lib/utils";
 
 const statements = ["One person.", "Multiple worlds.", "One ecosystem."];
 
 function Statement({ text, i, p }: { text: string; i: number; p: MotionValue<number> }) {
   const start = i * 0.2;
-  const opacity = useTransform(p, [start, start + 0.06, 0.66, 0.72], [0, 1, 1, 0]);
-  const y = useTransform(p, [start, start + 0.08], [40, 0], { ease: easeOutCubic });
+  const opacity = useRange(p, [start, start + 0.06, 0.66, 0.72], [0, 1, 1, 0]);
+  const y = useRange(p, [start, start + 0.08], [40, 0], easeOutCubic);
   return (
     <motion.span style={{ opacity, y }} className="block">
       {text}
@@ -26,18 +26,18 @@ function WorldDot({ i, p }: { i: number; p: MotionValue<number> }) {
   const a = (i / worlds.length) * Math.PI * 2 - Math.PI / 2;
   const R = 36;
   // appear with "Multiple worlds", hold through "One ecosystem", converge for the name
-  const r = useTransform(p, [0.2, 0.3, 0.66, 0.78], [0, R, R, 0], { ease: easeOutCubic });
+  const r = useRange(p, [0.2, 0.3, 0.66, 0.78], [0, R, R, 0], easeOutCubic);
   const cx = useTransform(r, (v) => `${50 + Math.cos(a) * v}%`);
   const cy = useTransform(r, (v) => `${50 + Math.sin(a) * v}%`);
-  const opacity = useTransform(p, [0.2, 0.26, 0.74, 0.8], [0, 1, 1, 0]);
+  const opacity = useRange(p, [0.2, 0.26, 0.74, 0.8], [0, 1, 1, 0]);
   return <motion.circle cx={cx} cy={cy} r={6} fill={worlds[i].accent} style={{ opacity }} />;
 }
 
 function Converge({ p }: { p: MotionValue<number> }) {
-  const linkOpacity = useTransform(p, [0.42, 0.5, 0.66, 0.72], [0, 0.5, 0.5, 0]);
-  const rotate = useTransform(p, [0.4, 0.7], [0, 30]);
-  const coreScale = useTransform(p, [0, 0.08, 0.66, 0.8], [0, 1, 1, 3]);
-  const coreOpacity = useTransform(p, [0.74, 0.84], [1, 0]);
+  const linkOpacity = useRange(p, [0.42, 0.5, 0.66, 0.72], [0, 0.5, 0.5, 0]);
+  const rotate = useRange(p, [0.4, 0.7], [0, 30]);
+  const coreScale = useRange(p, [0, 0.08, 0.66, 0.8], [0, 1, 1, 3]);
+  const coreOpacity = useRange(p, [0.74, 0.84], [1, 0]);
   return (
     <motion.svg aria-hidden className="absolute inset-0 h-full w-full" style={{ rotate }}>
       {worlds.map((w, i) => {
@@ -175,8 +175,8 @@ export function Finale() {
   const { replay } = useExperience();
   const ref = useRef<HTMLDivElement>(null);
   const p = useSectionProgress(ref);
-  const nameOpacity = useTransform(p, [0.76, 0.86], [0, 1]);
-  const nameScale = useTransform(p, [0.76, 0.95], [0.9, 1]);
+  const nameOpacity = useRange(p, [0.76, 0.86], [0, 1]);
+  const nameScale = useRange(p, [0.76, 0.95], [0.9, 1]);
 
   return (
     <section id="next" data-hud aria-labelledby="next-title" className="relative bg-obsidian">

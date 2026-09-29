@@ -1,16 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useTransform, type MotionValue } from "framer-motion";
+import { motion, type MotionValue } from "framer-motion";
 import { worlds } from "@/content/ecosystem";
-import { Coordinates, useSectionProgress } from "@/components/ui/primitives";
+import { Coordinates, useSectionProgress, useRange } from "@/components/ui/primitives";
 
 const nexts = ["The next company.", "The next product.", "The next idea.", "The next community.", "The next system."];
 
 function NextLine({ text, i, p }: { text: string; i: number; p: MotionValue<number> }) {
   const start = 0.14 + i * 0.1;
-  const opacity = useTransform(p, [start, start + 0.06, 0.72, 0.8], [0, 1, 1, 0.25]);
-  const x = useTransform(p, [start, start + 0.08], [-30, 0]);
+  const opacity = useRange(p, [start, start + 0.06, 0.72, 0.8], [0, 1, 1, 0.25]);
+  const x = useRange(p, [start, start + 0.08], [-30, 0]);
   return (
     <motion.li style={{ opacity, x }} className="display text-[clamp(1.8rem,4.6vw,4.4rem)] text-paper">
       {text}
@@ -22,8 +22,8 @@ function Ghost({ i, p }: { i: number; p: MotionValue<number> }) {
   const start = 0.14 + i * 0.1;
   const a = (i / nexts.length) * Math.PI * 2 + 0.6;
   const r = 250;
-  const opacity = useTransform(p, [start, start + 0.08], [0, 1]);
-  const scale = useTransform(p, [start, start + 0.1], [0.3, 1]);
+  const opacity = useRange(p, [start, start + 0.08], [0, 1]);
+  const scale = useRange(p, [start, start + 0.1], [0.3, 1]);
   return (
     <motion.g style={{ opacity, scale }} className="[transform-box:fill-box] origin-center">
       <circle cx={Math.cos(a) * r} cy={Math.sin(a) * r} r={26} fill="none" stroke="#f3f1eb" strokeOpacity={0.55} strokeDasharray="3 5" />
@@ -38,10 +38,10 @@ function Ghost({ i, p }: { i: number; p: MotionValue<number> }) {
 export function Future() {
   const ref = useRef<HTMLElement>(null);
   const p = useSectionProgress(ref);
-  const titleOpacity = useTransform(p, [0, 0.06, 0.72, 0.8], [0, 1, 1, 0.2]);
-  const finalOpacity = useTransform(p, [0.78, 0.88], [0, 1]);
-  const finalY = useTransform(p, [0.78, 0.9], [30, 0]);
-  const orbit = useTransform(p, [0, 1], [0, 40]);
+  const titleOpacity = useRange(p, [0, 0.06, 0.72, 0.8], [0, 1, 1, 0.2]);
+  const finalOpacity = useRange(p, [0.78, 0.88], [0, 1]);
+  const finalY = useRange(p, [0.78, 0.9], [30, 0]);
+  const orbit = useRange(p, [0, 1], [0, 40]);
 
   return (
     <section ref={ref} id="future" data-hud aria-labelledby="future-title" className="relative h-[360vh] bg-obsidian">

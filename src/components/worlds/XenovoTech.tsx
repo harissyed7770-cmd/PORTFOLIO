@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { worldById } from "@/content/ecosystem";
-import { RevealWords, useSectionProgress } from "@/components/ui/primitives";
+import { RevealWords, useSectionProgress, useRange } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 import { WorldShell } from "./WorldShell";
 
@@ -99,8 +99,8 @@ function Pane({ index, gap, active }: { index: number; gap: MotionValue<number>;
 export function XenovoTech() {
   const ref = useRef<HTMLDivElement>(null);
   const p = useSectionProgress(ref);
-  const gap = useTransform(p, [0.05, 0.55], [10, 58]);
-  const rotate = useTransform(p, [0, 1], [-44, -30]);
+  const gap = useRange(p, [0.05, 0.55], [10, 58]);
+  const rotate = useRange(p, [0, 1], [-44, -30]);
   const [active, setActive] = useState<number | null>(null);
 
   return (
